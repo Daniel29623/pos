@@ -13,10 +13,16 @@ def pause():
     else:
         system("read -n 1 -s")
 
+def create(path_name: str) -> dict:
+    with open("data/" + path_name + ".json", "w") as json:
+        json.write(dumps({}))
+    with open("data/" + path_name + ".json", "r") as json:
+        data = load(json)
+    return data
 def read(path_name: str) -> dict:
-    with open(path_name + ".json", "r") as json:
+    with open("data/" + path_name + ".json", "r") as json:
         data = load(json)
     return data
 def write(path_name: str, data: dict) -> None:
-    with open(path_name + ".json", "w") as json:
+    with open("data/" + path_name + ".json", "w") as json:
         json.write(dumps(data) + "\n")
