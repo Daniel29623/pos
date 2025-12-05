@@ -1,11 +1,10 @@
 from getpass import getpass
-from os import mkdir, rmdir, remove as rm
+from os import mkdir, rmdir
 from src import functions as f
 
 class reg:
     def create() -> None:
-        registers = f.read("registers")
-        registers = registers["registers"]
+        registers = f.read("registers")["registers"]
         while True:
             running = True
             while running:
@@ -57,9 +56,27 @@ class reg:
                     print("Please enter a valid answer!")
                     f.pause()
             registers.append(cn)
-            registers = {"registers": registers}
-            f.write("registers", registers)
+            f.write("registers", {"registers": registers})
             f.write(cn + "/data", regData)
         except KeyboardInterrupt:
             f.rmAll(cn)
             rmdir("data/" + cn)
+    def remove() -> None:
+        cn = input("What is be the codename of the register you want to remove? ")
+        registers = f.read("registers")["registers"]
+        if cn in registers:
+            regData = f.read(cn + "/data")
+            if getpass("Password: ") != regData["pw"]:
+                print("The password is not correct!")
+                f.pause()
+                return
+            if regData["acc"]:
+                f.rmAll(cn + "/accs")
+                rmdir("data/" + cn + "/accs")
+            f.rmAll(cn)
+            rmdir("data/" + cn)
+            registers.pop(registers.index(cn))
+            f.write("registers", {"registers": registers})
+        else:
+            print("There is no register with this codename!")
+            f.pause()
