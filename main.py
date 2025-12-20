@@ -1,5 +1,5 @@
 from src import functions as f
-from src import registers as r
+from src.registers import reg as r
 
 while True:
     f.clear()
@@ -21,11 +21,11 @@ while True:
     if choice == 1:
         pass
     elif choice == 2:
-        r.reg.create()
+        r.create()
     elif choice == 3:
-        pass
+        r.modify()
     elif choice == 4:
-        r.reg.remove()
+        r.remove()
     elif choice == 5:
         exit()
     else:
