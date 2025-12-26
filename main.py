@@ -16,7 +16,7 @@ while True:
             choice = int(choice)
             break
         except:
-            print("Not an integer number")
+            print("Not an available choice!")
             f.pause()
     if choice == 1:
         pass
@@ -29,5 +29,5 @@ while True:
     elif choice == 5:
         exit()
     else:
-        print("This is not an available choice!")
+        print("Not an available choice!")
         f.pause()
