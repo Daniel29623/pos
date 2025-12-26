@@ -8,7 +8,7 @@ class reg:
         while True:
             cont = False
             while True:
-                cn = input("What would be the codename of your register? (max 10 characters) ")
+                cn = input("Codename: ")
                 if len(list(cn)) <= 10 and len(list(cn)) > 0:
                     for char in list(cn):
                         if char == " ":
@@ -30,7 +30,7 @@ class reg:
                 f.pause()
         regData = f.create(cn + "/data")
         try:
-            regData["name"] = input("What will be the name of your register? ")
+            regData["name"] = input("Name: ")
             while True:
                 pw = getpass("New password: ")
                 pwa = getpass("Password again: ")
@@ -45,7 +45,7 @@ class reg:
                 if acc.lower().startswith("y"):
                     regData["acc"] = True
                     while True:
-                        regData["accs"] = [input("What will be the name of the first account? ")]
+                        regData["accs"] = [input("Name of the first account: ")]
                         break
                     mkdir("data/" + cn + "/accs")
                     f.create(cn + "/accs/" + regData["accs"][0])
@@ -64,12 +64,12 @@ class reg:
             f.rmAll(cn)
             rmdir("data/" + cn)
     def remove() -> None:
-        cn = input("What is the codename of the register you want to remove? ")
+        cn = input("Codename: ")
         registers = f.read("registers")["registers"]
         if cn in registers:
             regData = f.read(cn + "/data")
             if getpass("Password: ") != regData["pw"]:
-                print("The password is not correct!")
+                print("The password is incorrect!")
                 f.pause()
                 return
             if regData["acc"]:
@@ -83,7 +83,7 @@ class reg:
             print("There is no register with this codename!")
             f.pause()
     def modify() -> None:
-        cn = input("What is the codename of the register you want to modify? ")
+        cn = input("Codename: ")
         registers = f.read("registers")["registers"]
         if cn in registers:
             regData = f.read(cn + "/data")
@@ -92,7 +92,7 @@ class reg:
                 print("1. Password\n2. Name\n3. Account usage\n4. Codename\n5. Cancel")
                 print("------------------------------------------")
                 while True:
-                    choice = input("Enter the number of the action you want to take: ")
+                    choice = input("Enter an action's number to take: ")
                     try: 
                         choice = int(choice)
                         if choice == 1:
@@ -110,7 +110,7 @@ class reg:
                                 f.write(cn + "/data", regData)
                                 break
                         elif choice == 2:
-                            regData["name"] = input("What's the new name for this register? ")
+                            regData["name"] = input("New name: ")
                             print("The register's name was modified")
                             f.pause()
                             f.write(cn + "/data", regData)
@@ -131,7 +131,7 @@ class reg:
                                     else:
                                         print("Not a valid choice!")
                                         f.pause()
-                                        input("Do you want to disable accounts? (y/n) ")
+                                        tfchoice = input("Do you want to disable accounts? (y/n) ")
                             else:
                                 regData["acc"] = True
                                 print("Accounts are now enabled")
@@ -183,3 +183,9 @@ class reg:
                     except:
                         print("Unavailable choice!")
                         f.pause()
+            else:
+                print("The password is incorrect!")
+                f.pause()
+        else:
+            print("There is no register with this codename!")
+            f.pause()
