@@ -1,5 +1,5 @@
 from getpass import getpass
-from os import mkdir, rmdir
+from os import mkdir, rmdir, remove
 from src import functions as f
 
 class reg:
@@ -45,10 +45,21 @@ class reg:
                 if acc.lower().startswith("y"):
                     regData["acc"] = True
                     while True:
-                        regData["accs"] = [input("Name of the first account: ")]
+                        cont = False
+                        acccn = input("Account codename: ")
+                        for char in list(acccn):
+                            if char == " ":
+                                print("Account codename can't contain spaces!")
+                                f.pause()
+                                cont = True
+                                break
+                        if cont:
+                            continue
+                        regData["accs"] = [acccn]
                         break
                     mkdir("data/" + cn + "/accs")
                     f.create(cn + "/accs/" + regData["accs"][0])
+                    f.write(cn + "/accs/" + regData["accs"][0], {"name": input("Account name: "), "stock": {}})
                     break
                 elif acc.lower().startswith("n"):
                     regData["acc"] = False
@@ -88,10 +99,10 @@ class reg:
         if cn in registers:
             regData = f.read(cn + "/data")
             if getpass("Password: ") == regData["pw"]:
-                f.clear()
-                print("1. Password\n2. Name\n3. Account usage\n4. Codename\n5. Cancel")
-                print("------------------------------------------")
                 while True:
+                    f.clear()
+                    print("1. Password\n2. Name\n3. Account usage\n4. Codename\n5. Cancel")
+                    print("------------------------------------------")
                     choice = input("Enter an action's number to take: ")
                     try: 
                         choice = int(choice)
@@ -121,6 +132,10 @@ class reg:
                                 while True:
                                     if tfchoice.startswith("y"):
                                         regData["acc"] = False
+                                        regData.pop("accs")
+                                        f.rmAll(cn + "/accs")
+                                        rmdir("data/" + cn + "/accs")
+                                        f.create(cn + "/main")
                                         print("Accounts are now disabled")
                                         f.pause()
                                         break
@@ -134,6 +149,23 @@ class reg:
                                         tfchoice = input("Do you want to disable accounts? (y/n) ")
                             else:
                                 regData["acc"] = True
+                                while True:
+                                    cont = False
+                                    acccn = input("New account's codename: ")
+                                    for char in list(acccn):
+                                        if char == " ":
+                                            print("Account codename can't contain spaces!")
+                                            f.pause()
+                                            cont = True
+                                            break
+                                    if cont:
+                                        continue
+                                    regData["accs"] = [acccn]
+                                    break
+                                remove("data/" + cn + "/main.json")
+                                mkdir("data/" + cn + "/accs")
+                                f.create(cn + "/accs/" + regData["accs"][0])
+                                f.write(cn + "/accs/" + regData["accs"][0], {"name": input("Account name: "), "stock": {}})
                                 print("Accounts are now enabled")
                                 f.pause()
                             f.write(cn + "/data", regData)
@@ -178,6 +210,10 @@ class reg:
                             rmdir("data/" + cn)
                         elif choice == 5:
                             return
+                        else:
+                            print("Not an available choice!")
+                            f.pause()
+                            continue
                         f.write("registers", {"registers": registers})
                         break
                     except:
