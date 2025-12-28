@@ -2,6 +2,37 @@ from getpass import getpass
 from os import mkdir, rmdir, remove
 from src import functions as f
 
+class acc:
+    def create(cn: str) -> None:
+        regData = f.read(cn + "/data")
+        while True:
+            cont = False
+            acccn = input("New account codename: ")
+            for char in list(acccn):
+                if char == " ":
+                    print("Account codename can't contain spaces!")
+                    f.pause()
+                    cont = True
+                    break
+            if cont:
+                continue
+            break
+        regData["accs"].append(acccn)
+        f.create(cn + "/accs/" + acccn)
+        f.write(cn + "/accs/" + acccn, {"name": input("Account name: "), "stock": {}})
+        f.write(cn + "/data", regData)
+    def remove(cn: str) -> None:
+        regData = f.read(cn + "/data")
+        if len(regData["accs"]) == 1:
+            print("At least 1 account must remain in the register!\nIf you want to delete this one too, go to the main menu and disable accounts in this register.")
+            f.pause()
+            return
+        acccn = input("Account codename: ")
+        if acccn in regData["accs"]:
+            remove("data/" + cn + "/accs/" + acccn + ".json")
+            regData["accs"].pop(regData["accs"].index(acccn))
+        f.write(cn + "/data", regData)
+
 class reg:
     def create() -> None:
         registers = f.read("registers")["registers"]
@@ -122,7 +153,7 @@ class reg:
                                 break
                         elif choice == 2:
                             regData["name"] = input("New name: ")
-                            print("The register's name was modified")
+                            print("The register's name has been modified")
                             f.pause()
                             f.write(cn + "/data", regData)
                             break
