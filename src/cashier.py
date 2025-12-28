@@ -1,5 +1,6 @@
 from src import functions as f
 from src.registers import acc
+from src import stock
 from getpass import getpass
 
 class act:
@@ -78,30 +79,32 @@ class act:
             except:
                 print("Not a valid value!")
                 f.pause()
-    def stock(stocktable: dict, name: str, accname: str) -> None:
+    def stock(stocktable: dict, cn: str, accname: str) -> dict:
         while True:
             f.clear()
-            print(name)
+            print(f.read(cn + "/data")["name"])
             if accname != "":
                 print(accname)
             print("------------------------------------------")
             print("Item no.   Stock  Price  Name")
             print("------------------------------------------")
-            for itemno, itemdesc in stocktable.items():
+            for itemno, itemdesc in stocktable:
                 print(f"{itemno}  {itemdesc['stock']} {' ' * (5 - len(list(itemdesc['stock'])))} {itemdesc['price']} {' ' * (5 - len(list(itemdesc['price'])))} {itemdesc['name']}")
             print("------------------------------------------")
-            print("1. New item\n2. Modify item\n3. Remove item\n4. Exit stocktable")
+            print("1. Modify stock\n2. New item\n3. Modify item\n4. Remove item\n5. Exit stocktable")
             choice = input("Enter an action's number to take: ")
             try:
                 choice = int(choice)
                 if choice == 1:
-                    pass
+                    return stock.stockmod(cn, stocktable)
                 elif choice == 2:
-                    pass
+                    return stock.create(cn, stocktable)
                 elif choice == 3:
-                    pass
+                    return stock.modify(cn, stocktable, accname)
                 elif choice == 4:
-                    return
+                    return stock.remove(cn, stocktable)
+                elif choice == 5:
+                    return stocktable
                 else:
                     raise ValueError
             except:
@@ -160,7 +163,7 @@ def cashier(cn: str) -> None:
                             if secchoice == 1:
                                 act.sell(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], data["name"], f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])
                             elif secchoice == 2:
-                                act.stock(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], data["name"], f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])
+                                f.write(cn + "/accs/" + data["accs"][choice - 1], {"name": f.read(cn + "/accs/" + data["accs"][choice - 1])["name"], "stock": act.stock(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], cn, f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])})
                             elif secchoice == 3:
                                 break
                             else:
@@ -181,7 +184,7 @@ def cashier(cn: str) -> None:
                 if choice == 1:
                     act.sell(f.read(cn + "/main"), data["name"], "")
                 elif choice == 2:
-                    act.stock(f.read(cn + "/main"), data["name"], "")
+                    f.write(cn + "/main", act.stock(f.read(cn + "/main"), cn, ""))
                 elif choice == 3:
                     return
                 else:

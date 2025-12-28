@@ -102,8 +102,12 @@ def modify(cn: str, stocktable: dict, accname: str) -> dict:
         print("Item not found!")
         f.pause()
         return stocktable
-def stockmod(stocktable: dict) -> dict:
+def stockmod(cn: str, stocktable: dict) -> dict:
     code = input("Code: ")
+    if getpass("Password: ") != f.read(cn + "/data")["pw"]:
+        print("Password is incorrect!")
+        f.pause()
+        return stocktable
     if code in stocktable:
         amount = input("Amount to change ([+]/- <amount>): ")
         try:
