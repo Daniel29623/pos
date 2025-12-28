@@ -2,7 +2,7 @@ from src import functions as f
 from getpass import getpass
 
 def create(cn: str, stocktable: dict) -> dict:
-    if getpass("Password: ") != f.read(cn + "/data"):
+    if getpass("Password: ") != f.read(cn + "/data")["pw"]:
         print("Password is incorrect!")
         f.pause()
         return stocktable
@@ -12,7 +12,7 @@ def create(cn: str, stocktable: dict) -> dict:
         f.pause()
         return stocktable
     try:
-        code = str(int(code))
+        tcode = int(code)
     except:
         print("Code not in EAN-8 format")
         f.pause()
@@ -22,7 +22,7 @@ def create(cn: str, stocktable: dict) -> dict:
     modstocktable[code]["name"] = input("Name: ")
     price = input("Price: ")
     try:
-        price = float(price)
+        price = int(price)
     except:
         print("Price entered is not valid!")
         f.pause()
@@ -70,7 +70,7 @@ def modify(cn: str, stocktable: dict, accname: str) -> dict:
             elif choice == 2:
                 price = input("New price: ")
                 try:
-                    price = float(price)
+                    price = int(price)
                 except:
                     print("Price entered is not valid!")
                     f.pause()
@@ -84,7 +84,7 @@ def modify(cn: str, stocktable: dict, accname: str) -> dict:
                     f.pause()
                     return stocktable
                 try:
-                    ncode = str(int(ncode))
+                    tncode = int(ncode)
                 except:
                     print("Code not in EAN-8 format")
                     f.pause()

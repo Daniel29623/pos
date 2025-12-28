@@ -161,7 +161,7 @@ class reg:
                             if regData["acc"]:
                                 tfchoice = input("Accounts are enabled. Do you want to disable them?\nWARNING: This action will permanently delete all your accounts and their data from this register! (y/n) ")
                                 while True:
-                                    if tfchoice.startswith("y"):
+                                    if tfchoice.lower().startswith("y"):
                                         regData["acc"] = False
                                         regData.pop("accs")
                                         f.rmAll(cn + "/accs")
@@ -170,7 +170,7 @@ class reg:
                                         print("Accounts are now disabled")
                                         f.pause()
                                         break
-                                    elif tfchoice.startswith("n"):
+                                    elif tfchoice.lower().startswith("n"):
                                         print("Canceled")
                                         f.pause()
                                         break
@@ -179,26 +179,38 @@ class reg:
                                         f.pause()
                                         tfchoice = input("Do you want to disable accounts? (y/n) ")
                             else:
-                                regData["acc"] = True
+                                tfchoice = input("Accounts are disabled. Do you want to enable them?\nWARNING: This action will permamntly delete all your registered products and their data from this register! (y/n) ")
                                 while True:
-                                    cont = False
-                                    acccn = input("New account's codename: ")
-                                    for char in list(acccn):
-                                        if char == " ":
-                                            print("Account codename can't contain spaces!")
-                                            f.pause()
-                                            cont = True
+                                    if tfchoice.lower().startswith("y"):
+                                        regData["acc"] = True
+                                        while True:
+                                            cont = False
+                                            acccn = input("New account's codename: ")
+                                            for char in list(acccn):
+                                                if char == " ":
+                                                    print("Account codename can't contain spaces!")
+                                                    f.pause()
+                                                    cont = True
+                                                    break
+                                            if cont:
+                                                continue
+                                            regData["accs"] = [acccn]
                                             break
-                                    if cont:
-                                        continue
-                                    regData["accs"] = [acccn]
-                                    break
-                                remove("data/" + cn + "/main.json")
-                                mkdir("data/" + cn + "/accs")
-                                f.create(cn + "/accs/" + regData["accs"][0])
-                                f.write(cn + "/accs/" + regData["accs"][0], {"name": input("Account name: "), "stock": {}})
-                                print("Accounts are now enabled")
-                                f.pause()
+                                        remove("data/" + cn + "/main.json")
+                                        mkdir("data/" + cn + "/accs")
+                                        f.create(cn + "/accs/" + regData["accs"][0])
+                                        f.write(cn + "/accs/" + regData["accs"][0], {"name": input("Account name: "), "stock": {}})
+                                        print("Accounts are now enabled")
+                                        f.pause()
+                                        break
+                                    elif tfchoice.lower().startswith("n"):
+                                        print("Canceled")
+                                        f.pause()
+                                        break
+                                    else:
+                                        print("Not a valid choice!")
+                                        f.pause()
+                                        tfchoice = input("Do you want to enable accounts? (y/n) ")
                             f.write(cn + "/data", regData)
                             break
                         elif choice == 4:

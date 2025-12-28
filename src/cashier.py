@@ -31,7 +31,7 @@ class act:
                     cont = False
                     cash = input("Money given: ")
                     try:
-                        cash = float(cash)
+                        cash = int(cash)
                     except:
                         print("Invalid amount!")
                         f.pause()
@@ -88,28 +88,29 @@ class act:
             print("------------------------------------------")
             print("Item no.   Stock  Price  Name")
             print("------------------------------------------")
-            for itemno, itemdesc in stocktable:
-                print(f"{itemno}  {itemdesc['stock']} {' ' * (5 - len(list(itemdesc['stock'])))} {itemdesc['price']} {' ' * (5 - len(list(itemdesc['price'])))} {itemdesc['name']}")
+            for itemno, itemdesc in stocktable.items():
+                print(f"{itemno}  {itemdesc["stock"]} {' ' * (5 - len(list(str(itemdesc["stock"]))))} {itemdesc["price"]} {' ' * (5 - len(list(str(itemdesc["price"]))))} {itemdesc["name"]}")
             print("------------------------------------------")
             print("1. Modify stock\n2. New item\n3. Modify item\n4. Remove item\n5. Exit stocktable")
             choice = input("Enter an action's number to take: ")
             try:
                 choice = int(choice)
                 if choice == 1:
-                    return stock.stockmod(cn, stocktable)
+                    stocktable =  stock.stockmod(cn, stocktable)
                 elif choice == 2:
-                    return stock.create(cn, stocktable)
+                    stocktable =  stock.create(cn, stocktable)
                 elif choice == 3:
-                    return stock.modify(cn, stocktable, accname)
+                    stocktable =  stock.modify(cn, stocktable, accname)
                 elif choice == 4:
-                    return stock.remove(cn, stocktable)
+                    stocktable =  stock.remove(cn, stocktable)
                 elif choice == 5:
-                    return stocktable
+                    break
                 else:
                     raise ValueError
             except:
                 print("Not an available choice")
                 f.pause()
+        return stocktable
 
 def cashier(cn: str) -> None:
     while True:
