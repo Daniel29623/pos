@@ -18,7 +18,7 @@ class act:
             else:
                 print("Amount  Item Name")
                 for item in cart:
-                    print(f"{item["amount"]} {' ' * 6 - len(list(item["amount"]))} {stocktable[item["code"]]["name"]}")
+                    print(f"{item["amount"]} {' ' * (6 - len(list(str(item["amount"]))))} {stocktable[item["code"]]["name"]}")
             print("------------------------------------------")
             print("Any number below or equal to 1000 will count as an amount specifier\nLeave the field empty to get the total\nPut X if you want to go back!")
             action = input()
@@ -67,7 +67,7 @@ class act:
                         print("There is no item in the stocktable with this code!")
                         f.pause()
                 else:
-                    if action in stocktable:
+                    if str(action) in stocktable:
                         for item in cart:
                             if item["code"] == code:
                                 cart[cart.index(item)]["amount"] += 1
