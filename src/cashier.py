@@ -49,34 +49,41 @@ class act:
             elif action.lower() == "x":
                 return
             try:
-                action = int(action)
-                if action <= 1000:
-                    code = input()
+                if int(action) <= 1000:
+                    action = int(action)
+                    code = int(input())
                     if code <= 1000:
                         print("This is not a valid item code!")
                         f.pause()
                         continue
                     code = str(code)
                     if code in stocktable:
+                        found = False
                         for item in cart:
                             if item["code"] == code:
                                 cart[cart.index(item)]["amount"] += action
-                                continue
-                        cart.append({"code": str(code), "amount": action})
+                                found = True
+                                break
+                        if not found:
+                            cart.append({"code": str(code), "amount": action})
                     else:
                         print("There is no item in the stocktable with this code!")
                         f.pause()
                 else:
-                    if str(action) in stocktable:
+                    if action in stocktable:
+                        found = False
                         for item in cart:
-                            if item["code"] == code:
+                            if item["code"] == action:
                                 cart[cart.index(item)]["amount"] += 1
-                                continue
-                        cart.append({"code": str(action), "amount": 1})
+                                found = True
+                                break
+                        if not found:
+                            cart.append({"code": action, "amount": 1})
                     else:
                         print("There is no item in the stocktable with this code!")
                         f.pause()
-            except:
+            except Exception as e:
+                print(e)
                 print("Not a valid value!")
                 f.pause()
     def stock(stocktable: dict, cn: str, accname: str) -> dict:
@@ -86,7 +93,7 @@ class act:
             if accname != "":
                 print(accname)
             print("------------------------------------------")
-            print("Item no.   Stock  Price  Name")
+            print("Item no.  Stock  Price  Name")
             print("------------------------------------------")
             for itemno, itemdesc in stocktable.items():
                 print(f"{itemno}  {itemdesc["stock"]} {' ' * (5 - len(list(str(itemdesc["stock"]))))} {itemdesc["price"]} {' ' * (5 - len(list(str(itemdesc["price"]))))} {itemdesc["name"]}")

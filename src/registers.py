@@ -49,10 +49,10 @@ class reg:
                             break
                     if cont:
                         continue
+                    break
                 else:
                     print("The codename must be more than 0 characters and no more then 10!")
                     f.pause()
-                break
             try:
                 mkdir("data/" + cn)
                 break
