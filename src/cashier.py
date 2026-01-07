@@ -43,6 +43,7 @@ class act:
                         cont = True
                         break
                     print(f"The change is {cash - total}")
+                    f.pause()
                     return
                 if cont:
                     continue
