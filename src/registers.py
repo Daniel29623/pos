@@ -2,6 +2,8 @@ from getpass import getpass
 from os import mkdir, rmdir, remove
 from src import functions as f
 
+dischars = [" ", "/", "\\", "*", "?", "\"", "<", ">", "!"]
+
 class acc:
     def create(cn: str) -> None:
         regData = f.read(cn + "/data")
@@ -9,8 +11,8 @@ class acc:
             cont = False
             acccn = input("New account codename: ")
             for char in list(acccn):
-                if char == " ":
-                    print("Account codename can't contain spaces!")
+                if char in dischars:
+                    print("Account codename can't contain the following characters: /, \\, *, ?, \", <, >, ! and spaces!")
                     f.pause()
                     cont = True
                     break
@@ -42,8 +44,8 @@ class reg:
                 cn = input("Codename: ")
                 if len(list(cn)) <= 10 and len(list(cn)) > 0:
                     for char in list(cn):
-                        if char == " ":
-                            print("Codename can't contain spaces!")
+                        if char in dischars:
+                            print("Codename can't contain the following characters: /, \\, *, ?, \", <, >, ! and spaces!")
                             f.pause()
                             cont = True
                             break
@@ -80,7 +82,7 @@ class reg:
                         acccn = input("Account codename: ")
                         for char in list(acccn):
                             if char == " ":
-                                print("Account codename can't contain spaces!")
+                                print("Account codename can't contain the following characters: /, \\, *, ?, \", <, >, ! and spaces!")
                                 f.pause()
                                 cont = True
                                 break
@@ -188,7 +190,7 @@ class reg:
                                             acccn = input("New account's codename: ")
                                             for char in list(acccn):
                                                 if char == " ":
-                                                    print("Account codename can't contain spaces!")
+                                                    print("Account codename can't contain the following characters: /, \\, *, ?, \", <, >, ! and spaces!")
                                                     f.pause()
                                                     cont = True
                                                     break
@@ -220,7 +222,7 @@ class reg:
                                 if len(list(ncn)) <= 10 and len(list(ncn)) > 0:
                                     for char in list(ncn):
                                         if char == " ":
-                                            print("Codename can't contain spaces!")
+                                            print("Codename can't contain the following characters: /, \\, *, ?, \", <, >, ! and spaces!")
                                             f.pause()
                                             cont = True
                                             break
