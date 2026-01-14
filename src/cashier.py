@@ -4,7 +4,7 @@ from src import stock
 from getpass import getpass
 
 class act:
-    def sell(stocktable: dict, name: str, accname: str) -> None:
+    def sell(stocktable: dict, name: str, accname: str = "") -> None:
         cart = []
         while True:
             f.clear()
@@ -87,7 +87,7 @@ class act:
                 print(e)
                 print("Not a valid value!")
                 f.pause()
-    def stock(stocktable: dict, cn: str, accname: str) -> dict:
+    def stock(stocktable: dict, cn: str, accname: str = "") -> dict:
         while True:
             f.clear()
             print(f.read(cn + "/data")["name"])
@@ -99,24 +99,18 @@ class act:
             for itemno, itemdesc in stocktable.items():
                 print(f"{itemno}  {itemdesc["stock"]} {' ' * (5 - len(list(str(itemdesc["stock"]))))} {itemdesc["price"]} {' ' * (5 - len(list(str(itemdesc["price"]))))} {itemdesc["name"]}")
             print("------------------------------------------")
-            print("1. Modify stock\n2. New item\n3. Modify item\n4. Remove item\n5. Exit stocktable")
+            print("1. Enter editing mode\n2. Exit stocktable")
             choice = input("Enter an action's number to take: ")
             try:
                 choice = int(choice)
                 if choice == 1:
-                    stocktable =  stock.stockmod(cn, stocktable)
+                    stocktable = stock.main(cn, stocktable, accname)
                 elif choice == 2:
-                    stocktable =  stock.create(cn, stocktable)
-                elif choice == 3:
-                    stocktable =  stock.modify(cn, stocktable, accname)
-                elif choice == 4:
-                    stocktable =  stock.remove(cn, stocktable)
-                elif choice == 5:
                     break
                 else:
                     raise ValueError
             except:
-                print("Not an available choice")
+                print("Not an available choice!")
                 f.pause()
         return stocktable
 
@@ -170,9 +164,9 @@ def cashier(cn: str) -> None:
                         try:
                             secchoice = int(secchoice)
                             if secchoice == 1:
-                                act.sell(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], data["name"], f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])
+                                act.sell(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], data["name"], accname = f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])
                             elif secchoice == 2:
-                                f.write(cn + "/accs/" + data["accs"][choice - 1], {"name": f.read(cn + "/accs/" + data["accs"][choice - 1])["name"], "stock": act.stock(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], cn, f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])})
+                                f.write(cn + "/accs/" + data["accs"][choice - 1], {"name": f.read(cn + "/accs/" + data["accs"][choice - 1])["name"], "stock": act.stock(f.read(cn + "/accs/" + data["accs"][choice - 1])["stock"], cn, accname = f.read(cn + "/accs/" + data["accs"][choice - 1])["name"])})
                             elif secchoice == 3:
                                 break
                             else:
@@ -191,9 +185,9 @@ def cashier(cn: str) -> None:
             try:
                 choice = int(choice)
                 if choice == 1:
-                    act.sell(f.read(cn + "/main"), data["name"], "")
+                    act.sell(f.read(cn + "/main"), data["name"])
                 elif choice == 2:
-                    f.write(cn + "/main", act.stock(f.read(cn + "/main"), cn, ""))
+                    f.write(cn + "/main", act.stock(f.read(cn + "/main"), cn))
                 elif choice == 3:
                     return
                 else:
